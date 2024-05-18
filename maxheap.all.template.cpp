@@ -18,13 +18,16 @@ private:
     int capacity;
     int heapSize;
 
-    void heapify(int index);
+    void upHeap(int index);
+    void downHeap(int index);
 
 public:
     MaxHeap(int capacity);
     void insert(const Key& key, const Value& value);
     void deleteMax();
     void heapSort();
+    bool isEmpty() const;
+    Node getMax() const;
     void show() const;
 };
 
@@ -34,7 +37,15 @@ MaxHeap<Key, Value>::MaxHeap(int capacity) : capacity(capacity), heapSize(0) {
 }
 
 template<typename Key, typename Value>
-void MaxHeap<Key, Value>::heapify(int index) {
+void MaxHeap<Key, Value>::upHeap(int index) {
+    while (index != 0 && heap[(index - 1) / 2].key < heap[index].key) {
+        swap(heap[index], heap[(index - 1) / 2]);
+        index = (index - 1) / 2;
+    }
+}
+
+template<typename Key, typename Value>
+void MaxHeap<Key, Value>::downHeap(int index) {
     int largest = index;
     int left = 2 * index + 1;
     int right = 2 * index + 2;
@@ -47,7 +58,7 @@ void MaxHeap<Key, Value>::heapify(int index) {
 
     if (largest != index) {
         swap(heap[index], heap[largest]);
-        heapify(largest);
+        downHeap(largest);
     }
 }
 
@@ -61,10 +72,8 @@ void MaxHeap<Key, Value>::insert(const Key& key, const Value& value) {
     int currentIndex = heapSize;
     heap[heapSize++] = {key, value};
 
-    while (currentIndex != 0 && heap[(currentIndex - 1) / 2].key < heap[currentIndex].key) {
-        swap(heap[currentIndex], heap[(currentIndex - 1) / 2]);
-        currentIndex = (currentIndex - 1) / 2;
-    }
+    // Up-heap (bubble-up)
+    upHeap(currentIndex);
 }
 
 template<typename Key, typename Value>
@@ -75,65 +84,77 @@ void MaxHeap<Key, Value>::deleteMax() {
     }
 
     heap[0] = heap[--heapSize];
-    heapify(0);
+    downHeap(0);
 }
 
 template<typename Key, typename Value>
 void MaxHeap<Key, Value>::heapSort() {
+    int originalSize = heapSize;
     for (int i = heapSize / 2 - 1; i >= 0; i--)
-        heapify(i);
+        downHeap(i);
 
     for (int i = heapSize - 1; i > 0; i--) {
         swap(heap[0], heap[i]);
-        heapify(0);
+        heapSize--;
+        downHeap(0);
     }
+
+    heapSize = originalSize;
+}
+
+template<typename Key, typename Value>
+bool MaxHeap<Key, Value>::isEmpty() const {
+    return heapSize == 0;
+}
+
+template<typename Key, typename Value>
+typename MaxHeap<Key, Value>::Node MaxHeap<Key, Value>::getMax() const {
+    if (heapSize == 0) {
+        throw runtime_error("Heap is empty");
+    }
+    return heap[0];
 }
 
 template<typename Key, typename Value>
 void MaxHeap<Key, Value>::show() const {
     for (int i = 0; i < heapSize; i++) {
-        cout<<"( " << heap[i].key <<"=>" << heap[i].value << ")\t"<<endl;
+        cout << heap[i].key << " (" << heap[i].value << ") ";
     }
-    cout << std::endl;
+    cout <<endl;
 }
 
+// ------------ Test ------------
+
 int main() {
-    // MaxHeap<int, string> heap(10);
-
-    // // Test insertion
-    // heap.insert(3, "Three");
-    // heap.insert(2, "Two");
-    // heap.insert(15, "Fifteen");
-    // heap.insert(5, "Five");
-    // heap.insert(4, "Four");
-    // heap.insert(45, "Forty-five");
-
-    MaxHeap<int, int> heap(10);
+    MaxHeap<int, string> heap(10);
 
     // Test insertion
-    heap.insert(3, 3);
-    heap.insert(2, 2);
-    heap.insert(15, 15);
-    heap.insert(5, 5);
-    heap.insert(4, 4);
-    heap.insert(45, 45);
+    heap.insert(3, "Three");
+    heap.insert(2, "Two");
+    heap.insert(15, "Fifteen");
+    heap.insert(5, "Five");
+    heap.insert(4, "Four");
+    heap.insert(45, "Forty-five");
 
-    // Test d'affichage
-    cout<<"Key => Value "<<endl;
+    // Show the heap
+    cout << "Current heap: "<<endl;
     heap.show();
+
+    // Test getMax
+    cout << "Max value in the heap: " << heap.getMax().key << " (" << heap.getMax().value << ")" << endl;
 
     // Test deleteMax
     heap.deleteMax();
-
-    cout << "after suppression of max: "<<endl;
-    cout<<"Key => Value "<<endl;
+    cout << "Heap after deleting max: ";
     heap.show();
-    
-    cout << endl;
+
+    // Test heapSort
+    heap.heapSort();
+    cout << "Heap after sorting: ";
+    heap.show();
 
     return 0;
 }
 
+
 #endif
-
-
