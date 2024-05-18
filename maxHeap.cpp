@@ -16,7 +16,7 @@ void MaxHeap::heapify(int index) {
         largest = right;
 
     if (largest != index) {
-        std::swap(heap[index], heap[largest]);
+        swap(heap[index], heap[largest]);
         heapify(largest);
     }
 }
@@ -31,7 +31,7 @@ void MaxHeap::insert(int value) {
     heap[heapSize++] = value;
 
     while (currentIndex != 0 && heap[(currentIndex - 1) / 2] < heap[currentIndex]) {
-        std::swap(heap[currentIndex], heap[(currentIndex - 1) / 2]);
+        swap(heap[currentIndex], heap[(currentIndex - 1) / 2]);
         currentIndex = (currentIndex - 1) / 2;
     }
 }
@@ -53,7 +53,7 @@ void MaxHeap::heapSort() {
         heapify(i);
 
     for (int i = heapSize - 1; i > 0; i--) {
-        std::swap(heap[0], heap[i]);
+        swap(heap[0], heap[i]);
         heapify(0);
     }
 }

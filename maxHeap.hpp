@@ -1,11 +1,17 @@
 #ifndef MAXHEAP_HPP
 #define MAXHEAP_HPP
-
+#include <iostream>
 #include <vector>
+
+using namespace std;
+
+typedef int datatype;
+
+typedef vector<datatype> tablePriority;
 
 class MaxHeap {
 private:
-    std::vector<int> heap;
+    tablePriority heap;
     int capacity;
     int heapSize;
 

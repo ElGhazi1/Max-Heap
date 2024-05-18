@@ -1,4 +1,3 @@
-#include <iostream>
 #include "maxHeap.hpp"
 
 int main() {
@@ -19,9 +18,9 @@ int main() {
 
     // Test heapSort
     heap.heapSort();
-    std::cout << "Sorted array: ";
+    cout << "Sorted array: ";
     for (int i = 0; i < 5; ++i)
-    std::cout << std::endl;
+    cout <<endl;
 
     return 0;
 }
