@@ -145,12 +145,12 @@ int main() {
 
     // Test deleteMax
     heap.deleteMax();
-    cout << "Heap after deleting max: ";
+    cout << "Heap after deleting max: "<<endl;
     heap.show();
 
     // Test heapSort
     heap.heapSort();
-    cout << "Heap after sorting: ";
+    cout << "Heap after sorting: "<<endl;
     heap.show();
 
     return 0;
